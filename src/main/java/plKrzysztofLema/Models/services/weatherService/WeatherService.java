@@ -1,9 +1,7 @@
 package plKrzysztofLema.Models.services.weatherService;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import plKrzysztofLema.Models.Config;
+import plKrzysztofLema.Models.Utils;
 
 public class WeatherService {
     private static WeatherService ourInstance = new WeatherService();
@@ -16,6 +14,7 @@ public class WeatherService {
     }
 
     public void makeCall(String cityName){
+        System.out.println(Utils.makeHttpRequest(Config.APP_BASE_URL+cityName+"&appid="+Config.APP_ID));
 
     }
 
