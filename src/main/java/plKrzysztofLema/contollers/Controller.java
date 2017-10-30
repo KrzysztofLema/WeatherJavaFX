@@ -9,12 +9,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import plKrzysztofLema.Models.IWeatherObserver;
+import plKrzysztofLema.Models.WeatherInfo;
 import plKrzysztofLema.Models.services.weatherService.WeatherService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable, IWeatherObserver {
 
 
     @FXML
@@ -27,7 +30,7 @@ public class Controller implements Initializable {
     private WeatherService weatherService = WeatherService.getService();
 
     public void initialize(URL location, ResourceBundle resources) {
-
+        weatherService.registerObserver(this);
 
         buttonShowWeather.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -56,5 +59,10 @@ public class Controller implements Initializable {
                 }
             }
         });
+    }
+
+    @Override
+    public void onWeatherUpdate(WeatherInfo info) {
+    labelShowWeather.setText("Temperatura: "+info.getTemp()+ "Cisnienie: " + info.getPressure());
     }
 }

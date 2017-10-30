@@ -8,9 +8,7 @@ import java.net.URLConnection;
 public class Utils {
     public static String makeHttpRequest(String url){
         try {
-            URLConnection urlConnection = (HttpURLConnection) new URL(
-                    url)
-                    .openConnection();
+            URLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
 
             StringBuilder builder = new StringBuilder();
             int read = 0;
