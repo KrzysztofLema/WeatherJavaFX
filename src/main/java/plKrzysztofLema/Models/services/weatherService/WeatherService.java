@@ -6,6 +6,8 @@ import plKrzysztofLema.Models.IWeatherObserver;
 import plKrzysztofLema.Models.Utils;
 import plKrzysztofLema.Models.WeatherInfo;
 
+import java.util.List;
+
 public class WeatherService {
     private static WeatherService ourInstance = new WeatherService();
 
@@ -16,7 +18,7 @@ public class WeatherService {
     private WeatherService() {
     }
 
-    private IWeatherObserver observer;
+    private List<IWeatherObserver> observer;
 
     public void makeCall(String cityName) {
 
@@ -35,7 +37,9 @@ public class WeatherService {
         double pressure = main.getDouble("pressure");
         double windSpeed = wind.getDouble("speed");
 
-        observer.onWeatherUpdate(new WeatherInfo(temp,pressure));
+        for (IWeatherObserver iWeatherObserver : observer) {
+           iWeatherObserver.onWeatherUpdate(new WeatherInfo(temp,pressure));
+        }
 
         System.out.println("Temepratura to: " + temp);
         System.out.println("Ciśneinie to: " + pressure);
@@ -44,6 +48,6 @@ public class WeatherService {
     }
 
     public void registerObserver(IWeatherObserver observer) {
-        this.observer = observer;
+        this.observer.add(observer);
     }
 }
