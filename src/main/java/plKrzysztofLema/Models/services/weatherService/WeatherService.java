@@ -6,6 +6,7 @@ import plKrzysztofLema.Models.IWeatherObserver;
 import plKrzysztofLema.Models.Utils;
 import plKrzysztofLema.Models.WeatherInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherService {
@@ -18,7 +19,7 @@ public class WeatherService {
     private WeatherService() {
     }
 
-    private List<IWeatherObserver> observer;
+    private List<IWeatherObserver> observer =new ArrayList<IWeatherObserver>();
 
     public void makeCall(String cityName) {
 
