@@ -46,12 +46,11 @@ public class WeatherDaoImpl implements WeatherDao {
             e.printStackTrace();
         }
     }
-
     @Override
     public List<String> getAllCities() {
         List<String> cityNames = new ArrayList<>();
         try {
-            PreparedStatement statement = connector.getConnection().prepareStatement("SELECT cityName FROM weather");
+            PreparedStatement statement = connector.getConnection().prepareStatement("SELECT DISTINCT cityName FROM weather");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 cityNames.add(resultSet.getString("cityName"));
