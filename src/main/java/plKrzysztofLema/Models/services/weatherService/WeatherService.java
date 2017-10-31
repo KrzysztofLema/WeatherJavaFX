@@ -1,5 +1,6 @@
 package plKrzysztofLema.Models.services.weatherService;
 
+import javafx.application.Platform;
 import org.json.JSONObject;
 import plKrzysztofLema.Models.Config;
 import plKrzysztofLema.Models.IWeatherObserver;
@@ -8,6 +9,8 @@ import plKrzysztofLema.Models.WeatherInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WeatherService {
     private static WeatherService ourInstance = new WeatherService();
@@ -16,14 +19,22 @@ public class WeatherService {
         return ourInstance;
     }
 
+    private ExecutorService executorService;
+
     private WeatherService() {
+        executorService = Executors.newSingleThreadExecutor();
     }
 
-    private List<IWeatherObserver> observer =new ArrayList<IWeatherObserver>();
+    private List<IWeatherObserver> observer = new ArrayList<IWeatherObserver>();
 
     public void makeCall(String cityName) {
-
-        readJsonData(Utils.makeHttpRequest(Config.APP_BASE_URL + cityName + "&appid=" + Config.APP_ID));
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                readJsonData(Utils.makeHttpRequest(Config.APP_BASE_URL + cityName + "&appid=" + Config.APP_ID));
+            }
+        };
+        executorService.execute(runnable);
     }
 
 
@@ -34,13 +45,11 @@ public class WeatherService {
 
 
         double visibility = root.getDouble("visibility");
-        double temp = main.getDouble("temp");
-        double pressure = main.getDouble("pressure");
+        final double temp = main.getDouble("temp");
+        final double pressure = main.getDouble("pressure");
         double windSpeed = wind.getDouble("speed");
 
-        for (IWeatherObserver iWeatherObserver : observer) {
-           iWeatherObserver.onWeatherUpdate(new WeatherInfo(temp,pressure));
-        }
+        observer.forEach(s->Platform.runLater(() -> s.onWeatherUpdate(new WeatherInfo(temp,pressure))));
 
         System.out.println("Temepratura to: " + temp);
         System.out.println("Ciśneinie to: " + pressure);
