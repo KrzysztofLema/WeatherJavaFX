@@ -17,6 +17,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import plKrzysztofLema.Models.IWeatherObserver;
 import plKrzysztofLema.Models.WeatherInfo;
+import plKrzysztofLema.Models.WeatherModel;
+import plKrzysztofLema.Models.dao.WeatherDao;
+import plKrzysztofLema.Models.dao.daoImpl.WeatherDaoImpl;
 import plKrzysztofLema.Models.services.weatherService.WeatherService;
 
 import java.io.IOException;
@@ -35,6 +38,8 @@ public class Controller implements Initializable, IWeatherObserver {
     @FXML
     ProgressIndicator progressIndicator;
 
+    WeatherDao weatherDao=new WeatherDaoImpl();
+
     private WeatherService weatherService = WeatherService.getService();
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -43,7 +48,7 @@ public class Controller implements Initializable, IWeatherObserver {
         buttonShowWeather.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 progressIndicator.setVisible(true);
-                textFieldCityName.setVisible(false);
+
                 if (!textFieldCityName.getText().isEmpty()) {
                     weatherService.makeCall(textFieldCityName.getText());
                     textFieldCityName.clear()
@@ -56,7 +61,7 @@ public class Controller implements Initializable, IWeatherObserver {
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
                     progressIndicator.setVisible(true);
-                    textFieldCityName.setVisible(false);
+
                     if (!textFieldCityName.getText().isEmpty()) {
                         weatherService.makeCall(textFieldCityName.getText());
                         textFieldCityName.clear();
@@ -93,5 +98,6 @@ public class Controller implements Initializable, IWeatherObserver {
         progressIndicator.setVisible(false);
         labelShowWeather.setText("Temperatura: " + info.getTemp() + " | Cisnienie: " + info.getPressure());
         labelShowWeather.setVisible(true);
+        weatherDao.addWeather(new WeatherModel(info));
     }
 }

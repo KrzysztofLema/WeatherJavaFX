@@ -12,6 +12,13 @@ public class WeatherModel {
         this.date = date;
     }
 
+    public WeatherModel(WeatherInfo info){
+        this.cityName = info.getCityName();
+        this.temp = (float) info.getTemp(); //todo rozbieżność pol , do poprawy i refactoru
+        this.date = new Date(0);
+
+    }
+
     public String getCityName() {
         return cityName;
     }

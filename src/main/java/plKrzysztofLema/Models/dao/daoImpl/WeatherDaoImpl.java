@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class WeatherDaoImpl implements WeatherDao {
             statement.setInt(1,0);
             statement.setString(2,weatherModel.getCityName());
             statement.setFloat(3,weatherModel.getTemp());
-            statement.setDate(4,new Date(0));
+            statement.setDate(4, null);
             statement.execute();
             statement.close();
         } catch (SQLException e) {
